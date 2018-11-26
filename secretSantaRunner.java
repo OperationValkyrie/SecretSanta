@@ -6,7 +6,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.Random;
 
-public class secretSantaRunner{
+public class SecretSantaRunner{
    private static ArrayList<String> names;
    
    public static void main(String[] args) {
@@ -23,14 +23,14 @@ public class secretSantaRunner{
          return;
       }
       
-      secretSanta secretSantaObject = new secretSanta(names);
+      SecretSanta secretSantaObject = new SecretSanta(names);
       
       secretSantaObject.allowViewing();
    }
    
    private static void readNamesFromFile() {
       try{
-         Scanner reader = new Scanner(new FileReader("secretSanta.txt"));
+         Scanner reader = new Scanner(new FileReader("SecretSanta.txt"));
          while(reader.hasNextLine()) {
             names.add(reader.nextLine());
          }

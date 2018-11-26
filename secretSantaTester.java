@@ -6,7 +6,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.Random;
 
-public class secretSantaTester{
+public class SecretSantaTester{
 
    private static HashMap<String, HashMap<String, Integer>> santaResults;
    private static ArrayList<String> names;
@@ -34,7 +34,7 @@ public class secretSantaTester{
       int totalFailures = 0;
       for(int i = 0; i < totalRuns; i++) {
          System.out.print("Run " + i + ": ");
-         secretSanta secretSantaOccurance = new secretSanta(names);
+         SecretSanta secretSantaOccurance = new SecretSanta(names);
          if(secretSantaOccurance.getSuccess()) {
             readResults(secretSantaOccurance.getSantaAssignees());
             totalFailures += secretSantaOccurance.getFailures();
