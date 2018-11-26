@@ -28,6 +28,9 @@ public class SecretSantaRunner{
       secretSantaObject.allowViewing();
    }
    
+   /**
+    * Reads the names from the file or prints out ussage information
+    */
    private static void readNamesFromFile() {
       try{
          Scanner reader = new Scanner(new FileReader("SecretSanta.txt"));
@@ -36,6 +39,10 @@ public class SecretSantaRunner{
          }
       } catch(Exception e) {
          System.out.println("Error: Enter names in secretSanta.txt or args.");
+         System.out.println("  To run with names from file use the command:");
+         System.out.println("    java -jar SecretSanta.jar");
+         System.out.println("  To run with names as arguments use the command:");
+         System.out.prihtln("    java - jar SecretSanta.jar name1 name2 name3");
       }
    }
 }
