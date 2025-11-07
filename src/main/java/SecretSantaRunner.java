@@ -30,13 +30,14 @@ public class SecretSantaRunner{
          sb.append("\n\nYour Secret Santa Assignee is: ");
          sb.append(entry.getValue());
          sb.append("\nPlease add in your request ASAP.");
+         sb.append("\nTHIS IS A TEST EMAIL. THIS IS NOT YOUR ASSIGNEE.");
          sb.append("\nLink to the Document: ");
-         sb.append("https://docs.google.com/document/d/1M5LV3YoRbXCyeFsKwcOyOkJ2HdRSonztC5ZGMa-D7Bk/edit?usp=sharing");
+         sb.append("https://docs.google.com/document/d/168OoYs1EkCaQ5iQ9cwRTCqpCbHlJJYmM6yA7XoCEE6s/edit?usp=sharing");
          sb.append("\nRegards, \n\tJonathan Chang");
          //System.out.println("Email: " + emails.get(entry.getKey()));
          //System.out.println(sb.toString());
-         mailHandler.sendMessage(emails.get(entry.getValue()), emails.get(entry.getKey()),
-            "Secret Santa", sb.toString());
+         //mailHandler.sendMessage(emails.get(entry.getValue()), emails.get(entry.getKey()),
+         //   "Secret Santa", sb.toString());
          System.out.println("Email Sent to: " + emails.get(entry.getKey()));
       }
    }
@@ -46,11 +47,11 @@ public class SecretSantaRunner{
     */
    private static void readNamesFromFile() {
       try{
-         Scanner reader = new Scanner(SecretSantaRunner.class.getResource("secretSantaCousins.txt").openStream());
+         Scanner reader = new Scanner(SecretSantaRunner.class.getResource("secretSanta.txt").openStream());
          while(reader.hasNextLine()) {
             String line = reader.nextLine();
             String parts[] = line.split("\\|");
-            if(parts.length != 2 && parts.length != 3) {
+            if(parts.length != 2 && parts.length != 3 && parts.length != 4) {
                System.out.println("Error: Enter Names in format 'Name | email'.");
                names.clear();
                emails.clear();
@@ -59,9 +60,14 @@ public class SecretSantaRunner{
             String name = parts[0].trim();
             String email = parts[1].trim();
             Person person = new Person(name, email);
-            if (parts.length == 3) {
+            // If file contains history
+            if (parts.length >= 3) {
                person.setHistory(new ArrayList<>(Arrays.asList(parts[2].trim().split(","))));
                person.getHistory().replaceAll(String::trim);
+            }
+            // If file contains banned
+            if (parts.length >= 4) {
+                person.setBanned(new ArrayList<>(Arrays.asList(parts[3].trim().split(","))));
             }
             if (persons.containsKey(name)) {
                System.out.println("Error: Duplicate Name: " + name);

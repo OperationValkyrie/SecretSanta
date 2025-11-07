@@ -8,8 +8,6 @@ public class SecretSanta {
    private HashMap<String, String> santas;
 
    private HashMap<String, Person> persons;
-   private HashMap<String, ArrayList<String>> historyTickets;
-   private int[] historyWeight = {0, 0, 1, 10, 20, 30};
    
    //Holds the number of failed runs (No longer used with new assigning algorithm)
    private int failures;
@@ -17,7 +15,7 @@ public class SecretSanta {
    private boolean success;
    
    //Holds the randomness for assigning
-   private Random random;
+   private final Random random;
    
    /**
     * Constructor for this SecretSanta Object
@@ -28,7 +26,6 @@ public class SecretSanta {
       this.names = new ArrayList<String>(persons.keySet());
       this.persons = persons;
       santas = new HashMap<String, String>();
-      historyTickets = new HashMap<String, ArrayList<String>>();
 
       random = new Random(System.currentTimeMillis());
       
@@ -40,30 +37,9 @@ public class SecretSanta {
 
    private void calculateHistoryTickets() {
       for (Map.Entry<String, Person> entry : persons.entrySet()) {
-         ArrayList<String> history = entry.getValue().getHistory();
-         int defaultIndex = history.size() >= historyWeight.length ? historyWeight.length - 1 : history.size();
-         int defaultNumber = historyWeight[defaultIndex];
-         int[] ticketNumber = new int[names.size()];
-         Arrays.fill(ticketNumber, defaultNumber);
-
-         int historyWeightIndex = 0;
-         for (String historyName : history) {
-            ticketNumber[names.indexOf(historyName)] = Math.min(ticketNumber[names.indexOf(historyName)], historyWeight[historyWeightIndex++]);
-            if (defaultIndex < historyWeightIndex) {
-               break;
-            }
-         }
-         historyTickets.put(entry.getKey(), new ArrayList<String>());
-         for (String name : names) {
-            if (name == entry.getKey()) {
-               continue;
-            }
-            ArrayList<String> tickets = historyTickets.get(entry.getKey());
-            String[] ticketSingle = new String[ticketNumber[names.indexOf(name)]];
-            Arrays.fill(ticketSingle, name);
-            Collections.addAll(tickets, ticketSingle);
-         }
-         //System.out.println(entry.getKey() + ":" + historyTickets.get(entry.getKey()));
+         //System.out.println(entry.getKey() + ":" + entry.getValue().getHistory());
+         entry.getValue().calculateHistoryTickets(names, random);
+         //System.out.println(entry.getKey() + ":" + entry.getValue().getHistoryTickets());
       }
    }
 
@@ -71,24 +47,39 @@ public class SecretSanta {
     * Randomly assigns assignees to santas
    */
    private boolean assignSantas() {
-      Collections.shuffle(names, random);
-      ArrayList<String> namesUsed = new ArrayList<String>();
-      for (int i = 0; i < names.size(); ++i) {
+      ArrayList<Integer> namesUsed = new ArrayList<>();
+      ArrayList<Integer> orderOfAssignment =  new ArrayList<>();
+      int o = 0;
+      for (String name : names) {
+          orderOfAssignment.add(o++);
+      }
+      Collections.shuffle(orderOfAssignment, random);
+      for (int j = 0; j < names.size(); ++j) {
+         int i = orderOfAssignment.get(j);
          String santa = names.get(i);
 
-         ArrayList<String> tickets = copyArrayList(historyTickets.get(santa));
+         ArrayList<Integer> tickets = new ArrayList<>(persons.get(santa).getHistoryTickets());
+         if (tickets.isEmpty()) {
+             System.out.println("Error: Name: " + santa + " has no valid possible assignees.");
+             System.exit(1);
+         }
          tickets.removeAll(namesUsed);
-         if (tickets.size() == 0) {
+         if (tickets.isEmpty()) {
             namesUsed.clear();
             santas.clear();
-            i = -1;
+            j = -1;
+            Collections.shuffle(orderOfAssignment, random);
             ++failures;
+            if (failures >= 10) {
+                System.out.println("Error: Unable to find a valid combination.");
+                return false;
+            }
             continue;
          }
          Collections.shuffle(tickets, random);
-         String assignee = tickets.get(random.nextInt(tickets.size()));
+         String assignee = names.get(tickets.get(random.nextInt(tickets.size())));
          santas.put(santa, assignee);
-         namesUsed.add(assignee);
+         namesUsed.add(names.indexOf(assignee));
       }
 
       for (Map.Entry<String, String> entry : santas.entrySet()) {
@@ -104,12 +95,8 @@ public class SecretSanta {
     * @param original The ArrayList to copy
     * @returns The deep copy of the given ArrayList
    */
-   private ArrayList<String> copyArrayList(ArrayList<String> original) {
-      ArrayList<String> copy = new ArrayList<String>();
-      for(int i = 0; i < original.size(); i++) {
-         copy.add(original.get(i));
-      }
-      return copy;
+   private ArrayList<Integer> copyArrayList(ArrayList<Integer> original) {
+      return new ArrayList<>(original);
    }
 
    /**

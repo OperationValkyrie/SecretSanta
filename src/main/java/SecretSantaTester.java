@@ -23,6 +23,7 @@ public class SecretSantaTester{
       int totalRuns = 100000;
       
       int totalFailures = 0;
+      int maxFailures = 0;
       for(int i = 0; i < totalRuns; i++) {
          System.out.print("Run " + i + ": ");
          try {
@@ -30,10 +31,12 @@ public class SecretSantaTester{
             if (secretSantaOccurance.getSuccess()) {
                readResults(secretSantaOccurance.getSantaAssignees());
                totalFailures += secretSantaOccurance.getFailures();
+               maxFailures = Math.max(maxFailures, secretSantaOccurance.getFailures());
                System.out.print("Success");
             } else {
 
                totalFailures++;
+
                System.out.print("Failure");
             }
          } catch (Exception e) {
@@ -52,7 +55,7 @@ public class SecretSantaTester{
             }
          }
       }
-      System.out.println("Failures: " + totalFailures + " - " + (double) totalFailures/totalRuns);
+      System.out.println("Failures: " + totalFailures + " - " + (double) totalFailures/totalRuns + " - " + maxFailures);
    }
    
    private static void initializeResults() {
@@ -67,6 +70,7 @@ public class SecretSantaTester{
    }
    
    private static void readResults(HashMap<String, String> results) {
+      //System.out.println(results);
       for(int i = 0; i < names.size(); i++) {
          String assignee = results.get(names.get(i));
          Integer currentValue = santaResults.get(names.get(i)).get(assignee);
@@ -80,11 +84,11 @@ public class SecretSantaTester{
     */
    private static void readNamesFromFile() {
       try{
-         Scanner reader = new Scanner(SecretSantaTester.class.getResource("secretSantaCousins.txt").openStream());
+         Scanner reader = new Scanner(SecretSantaTester.class.getResource("secretSanta.txt").openStream());
          while(reader.hasNextLine()) {
             String line = reader.nextLine();
-            String parts[] = line.split("\\|");
-            if(parts.length != 2 && parts.length != 3) {
+            String[] parts = line.split("\\|");
+            if(parts.length != 2 && parts.length != 3 && parts.length != 4) {
                System.out.println("Error: Enter Names in format 'Name | email'.");
                names.clear();
                break;
@@ -92,9 +96,13 @@ public class SecretSantaTester{
             String name = parts[0].trim();
             String email = parts[1].trim();
             Person person = new Person(name, email);
-            if (parts.length == 3) {
+            if (parts.length >= 3) {
                person.setHistory(new ArrayList<>(Arrays.asList(parts[2].trim().split(","))));
                person.getHistory().replaceAll(String::trim);
+            }
+            // If file contains banned
+            if (parts.length >= 4) {
+                person.setBanned(new ArrayList<>(Arrays.asList(parts[3].trim().split(","))));
             }
             if (persons.containsKey(name)) {
                System.out.println("Error: Duplicate Name: " + name);
