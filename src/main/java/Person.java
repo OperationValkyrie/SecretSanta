@@ -15,11 +15,11 @@ public class Person {
     private static final int[] historyWeight = {0, 0, 10, 20, 20, 30};
 
 
-    public Person (String name, String email) {
+    public Person(String name, String email) {
         this(name, email, new ArrayList<String>());
     }
 
-    public Person (String name, String email, ArrayList<String> history) {
+    public Person(String name, String email, ArrayList<String> history) {
         this.name = name;
         this.email = email;
         this.history = history;
@@ -94,5 +94,7 @@ public class Person {
         this.banned = banned;
     }
 
-    public void addToBanned(String ban) {this.banned.add(0, ban);}
+    public void addToBanned(String ban) {
+        this.banned.add(0, ban);
+    }
 }
