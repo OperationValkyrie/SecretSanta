@@ -29,15 +29,15 @@ public class SecretSantaRunner {
             sb.append(entry.getKey());
             sb.append("\n\nYour Secret Santa Assignee is: ");
             sb.append(entry.getValue());
-            sb.append("\nPlease add in your request ASAP.");
-            sb.append("\nTHIS IS A TEST EMAIL. THIS IS NOT YOUR ASSIGNEE.");
+            //sb.append("\nPlease add in your request ASAP.");
+            //sb.append("\nTHIS IS A TEST EMAIL. THIS IS NOT YOUR ASSIGNEE.");
             sb.append("\nLink to the Document: ");
             sb.append("https://docs.google.com/document/d/168OoYs1EkCaQ5iQ9cwRTCqpCbHlJJYmM6yA7XoCEE6s/edit?usp=sharing");
             sb.append("\nRegards, \n\tJonathan Chang");
             //System.out.println("Email: " + emails.get(entry.getKey()));
             //System.out.println(sb.toString());
-            //mailHandler.sendMessage(emails.get(entry.getValue()), emails.get(entry.getKey()),
-            //   "Secret Santa", sb.toString());
+            mailHandler.sendMessage(emails.get(entry.getValue()), emails.get(entry.getKey()),
+               "Secret Santa", sb.toString());
             System.out.println("Email Sent to: " + emails.get(entry.getKey()));
         }
     }

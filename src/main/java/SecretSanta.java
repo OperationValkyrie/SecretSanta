@@ -90,7 +90,56 @@ public class SecretSanta {
             String assignee = names.get(tickets.get(random.nextInt(tickets.size())));
             santas.put(santa, assignee);
             namesUsed.add(names.indexOf(assignee));
-            //j = names.indexOf(assignee);
+        }
+
+        for (Map.Entry<String, String> entry : santas.entrySet()) {
+            persons.get(entry.getKey()).setAssignee((entry.getValue()));
+            //persons.get(entry.getKey()).addToHistory((entry.getValue()));
+        }
+
+        return true;
+    }
+
+    /**
+     * Randomly assigns assignees to santas
+     */
+    private boolean assignSantasFullCycle() {
+        ArrayList<Integer> namesUsed = new ArrayList<>();
+        int i =  random.nextInt(names.size());;
+        while (santas.size() != names.size()) {
+            String santa = names.get(i);
+
+            ArrayList<Integer> tickets = new ArrayList<>(persons.get(santa).getHistoryTickets());
+            if (tickets.isEmpty()) {
+                System.out.println("Error: Name: " + santa + " has no valid possible assignees.");
+                System.exit(1);
+            }
+            tickets.removeAll(namesUsed);
+            // Remove santa of this santa from possible
+            if (namesUsed.contains(i)) {
+                for (HashMap.Entry<String, String> entry : santas.entrySet()) {
+                    if (Objects.equals(entry.getValue(), santa)) {
+                        tickets.removeAll(Collections.singleton(names.indexOf(entry.getKey())));
+                        break;
+                    }
+                }
+            }
+            if (tickets.isEmpty()) {
+                namesUsed.clear();
+                santas.clear();
+                i = random.nextInt(names.size());
+                ++failures;
+                if (failures >= 10) {
+                    System.out.println("Error: Unable to find a valid combination.");
+                    return false;
+                }
+                continue;
+            }
+            Collections.shuffle(tickets, random);
+            String assignee = names.get(tickets.get(random.nextInt(tickets.size())));
+            santas.put(santa, assignee);
+            namesUsed.add(names.indexOf(assignee));
+            i = names.indexOf(assignee);
         }
 
         for (Map.Entry<String, String> entry : santas.entrySet()) {
