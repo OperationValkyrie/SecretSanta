@@ -65,6 +65,15 @@ public class SecretSanta {
                 System.exit(1);
             }
             tickets.removeAll(namesUsed);
+            // Remove santa of this santa from possible
+            if (namesUsed.contains(i)) {
+                for (HashMap.Entry<String, String> entry : santas.entrySet()) {
+                    if (Objects.equals(entry.getValue(), santa)) {
+                        tickets.removeAll(Collections.singleton(names.indexOf(entry.getKey())));
+                        break;
+                    }
+                }
+            }
             if (tickets.isEmpty()) {
                 namesUsed.clear();
                 santas.clear();
@@ -81,6 +90,7 @@ public class SecretSanta {
             String assignee = names.get(tickets.get(random.nextInt(tickets.size())));
             santas.put(santa, assignee);
             namesUsed.add(names.indexOf(assignee));
+            //j = names.indexOf(assignee);
         }
 
         for (Map.Entry<String, String> entry : santas.entrySet()) {
