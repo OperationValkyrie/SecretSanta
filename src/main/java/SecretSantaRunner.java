@@ -36,9 +36,9 @@ public class SecretSantaRunner {
             sb.append("\nRegards, \n\tJonathan Chang");
             //System.out.println("Email: " + emails.get(entry.getKey()));
             //System.out.println(sb.toString());
-            mailHandler.sendMessage(emails.get(entry.getValue()), emails.get(entry.getKey()),
-               "Secret Santa", sb.toString());
-            System.out.println("Email Sent to: " + emails.get(entry.getKey()));
+            //mailHandler.sendMessage(emails.get(entry.getValue()), emails.get(entry.getKey()),
+            //   "Secret Santa", sb.toString());
+            //System.out.println("Email Sent to: " + emails.get(entry.getKey()));
         }
     }
 
@@ -68,6 +68,7 @@ public class SecretSantaRunner {
                 // If file contains banned
                 if (parts.length >= 4) {
                     person.setBanned(new ArrayList<>(Arrays.asList(parts[3].trim().split(","))));
+                    person.getBanned().replaceAll(String::trim);
                 }
                 if (persons.containsKey(name)) {
                     System.out.println("Error: Duplicate Name: " + name);

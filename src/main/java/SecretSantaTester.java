@@ -103,6 +103,7 @@ public class SecretSantaTester {
                 // If file contains banned
                 if (parts.length >= 4) {
                     person.setBanned(new ArrayList<>(Arrays.asList(parts[3].trim().split(","))));
+                    person.getBanned().replaceAll(String::trim);
                 }
                 if (persons.containsKey(name)) {
                     System.out.println("Error: Duplicate Name: " + name);

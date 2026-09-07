@@ -12,7 +12,7 @@ public class Person {
     private final ArrayList<Integer> historyTickets;
     private ArrayList<String> banned;
 
-    private static final int[] historyWeight = {0, 0, 10, 20, 20, 30};
+    private static final int[] historyWeight = {0, 10, 30, 30, 50};
 
 
     public Person(String name, String email) {
@@ -81,7 +81,7 @@ public class Person {
             }
         }
         for (String name : names) {
-            if (this.name.equals(name) || banned.contains((name))) {
+            if (this.name.equals(name) || banned.contains(name)) {
                 continue;
             }
             int capacity = ticketNumber[names.indexOf(name)];
