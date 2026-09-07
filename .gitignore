@@ -2,4 +2,4 @@
 *.json
 **/*.json
 pass.txt
-
+/build

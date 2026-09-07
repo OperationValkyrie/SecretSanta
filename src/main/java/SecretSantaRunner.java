@@ -23,22 +23,25 @@ public class SecretSantaRunner {
         HashMap<String, String> santas = secretSantaObject.getSantaAssignees();
         MailHandler mailHandler = new MailHandler();
         for (HashMap.Entry<String, String> entry : santas.entrySet()) {
-            //System.out.println(entry.getKey() + " " +  entry.getValue());
+            //if (!Objects.equals(entry.getKey(), "Benjamin")) {
+            //    continue;
+            //}
+            System.out.println(entry.getKey() + " " +  entry.getValue());
             StringBuilder sb = new StringBuilder();
             sb.append("Greetings, ");
             sb.append(entry.getKey());
             sb.append("\n\nYour Secret Santa Assignee is: ");
             sb.append(entry.getValue());
-            //sb.append("\nPlease add in your request ASAP.");
-            //sb.append("\nTHIS IS A TEST EMAIL. THIS IS NOT YOUR ASSIGNEE.");
+            sb.append("\nPlease add in your request ASAP.");
+            sb.append("\nTHIS IS A TEST EMAIL. THIS IS NOT YOUR ASSIGNEE.");
             sb.append("\nLink to the Document: ");
-            sb.append("https://docs.google.com/document/d/168OoYs1EkCaQ5iQ9cwRTCqpCbHlJJYmM6yA7XoCEE6s/edit?usp=sharing");
+            sb.append("https://docs.google.com/document/d/10To14sEeUQZfYjRmT5WxgzmUq2oNaLQ4UhfljARaKTA/edit?tab=t.0#heading=h.16ru9a7ga8rs");
             sb.append("\nRegards, \n\tJonathan Chang");
-            //System.out.println("Email: " + emails.get(entry.getKey()));
-            //System.out.println(sb.toString());
+            System.out.println("Email: " + emails.get(entry.getKey()));
+            System.out.println(sb.toString());
             //mailHandler.sendMessage(emails.get(entry.getValue()), emails.get(entry.getKey()),
             //   "Secret Santa", sb.toString());
-            //System.out.println("Email Sent to: " + emails.get(entry.getKey()));
+            System.out.println("Email Sent to: " + emails.get(entry.getKey()));
         }
     }
 
